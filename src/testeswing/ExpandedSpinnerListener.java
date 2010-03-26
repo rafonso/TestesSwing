@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package testeswing;
 
 import java.awt.event.KeyEvent;
@@ -16,6 +12,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 
 /**
+ * Listener para que o {@link JSpinner} possa "escutar eventos de Mouse e também eventos de teclasdo.
  *
  * @author rafael
  */
