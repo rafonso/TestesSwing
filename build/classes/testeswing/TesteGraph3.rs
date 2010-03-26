@@ -1,2 +1,0 @@
-testeswing.TesteGraph3
-testeswing.GaussianaPlot

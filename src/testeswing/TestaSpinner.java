@@ -10,12 +10,6 @@
  */
 package testeswing;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import java.util.Arrays;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-
 /**
  *
  * @author rafael
@@ -24,6 +18,7 @@ public class TestaSpinner extends javax.swing.JFrame {
 
     public static final String CTRL_UP = "CTRL_UP";
     public static final String CTRL_DOWN = "CTRL_DOWN";
+
     /** Creates new form TestaSpinner */
     public TestaSpinner() {
         initComponents();
@@ -53,7 +48,7 @@ public class TestaSpinner extends javax.swing.JFrame {
         getContentPane().add(lblValor);
 
         spnValor.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
-        spnValor.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), null, Integer.valueOf(50), Integer.valueOf(1)));
+        spnValor.setModel(new javax.swing.SpinnerNumberModel(0, -50, 50, 1));
         spnValor.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 spnValorStateChanged(evt);

@@ -1,2 +1,0 @@
-testeswing.SenoPlot
-testeswing.TesteGraph

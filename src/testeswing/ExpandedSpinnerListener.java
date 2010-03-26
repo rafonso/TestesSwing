@@ -107,14 +107,12 @@ public class ExpandedSpinnerListener implements MouseWheelListener, KeyListener 
         SpinnerNumberModel model = (SpinnerNumberModel) spinner.getModel();
         boolean add = (e.getWheelRotation() < 0);
 
-        Object newValue = SwingUtilities.isRightMouseButton(e)
+        boolean extender = SwingUtilities.isRightMouseButton(e) || (e.isControlDown());
+
+        Object newValue = extender
                 ? this.getExtendedNewValue(model, add)
                 : this.getSimpleNewValue(model, add);
         model.setValue(newValue);
-    }
-
-    public void keyTyped(KeyEvent e) {
-        // Nao faz nada (ainda)
     }
 
     private JSpinner getSpinner(KeyEvent e) {
@@ -156,7 +154,11 @@ public class ExpandedSpinnerListener implements MouseWheelListener, KeyListener 
     }
 
     public void keyReleased(KeyEvent e) {
-        // Nao faz nada (ainda)
+        //System.out.println(e);
+    }
+
+    public void keyTyped(KeyEvent e) {
+        // System.out.println(e);
     }
 
     public Number getExtendedStep() {
