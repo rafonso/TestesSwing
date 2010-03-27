@@ -91,7 +91,7 @@
             <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="spnBStateChanged"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="ExpandedSpinnerListener.bindSpinner(spnB, 1.0);"/>
+            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="ExpandedSpinnerListener.bindSpinner(spnB, 0.5);"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JSpinner" name="spnA">
@@ -107,7 +107,7 @@
             <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="spnAStateChanged"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="ExpandedSpinnerListener.bindSpinner(spnA, 1.0);"/>
+            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="ExpandedSpinnerListener.bindSpinner(spnA, 0.5);"/>
           </AuxValues>
         </Component>
       </SubComponents>
@@ -123,7 +123,7 @@
       <SubComponents>
         <Component class="org.jdesktop.swingx.JXLabel" name="lblEquacao">
           <Properties>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt;y(x) = A * x * e&lt;sup&gt;-B * x&lt;/sup&gt;&lt;/html&gt;"/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;y(x) = A / B * x * e&lt;sup&gt;-(x -B) / B&lt;/sup&gt;&lt;/html&gt;"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -146,7 +146,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="graph.addPlots(Color.RED, this.plot);"/>
+        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="graph.addPlots(Color.RED, this.plot);&#xa;graph.addPlots(Color.GREEN, this.linePlot, this.expoentPlot);"/>
       </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">

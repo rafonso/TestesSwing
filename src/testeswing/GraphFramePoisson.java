@@ -87,12 +87,12 @@ public class GraphFramePoisson extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        ExpandedSpinnerListener.bindSpinner(spnB, 1.0);
-        ExpandedSpinnerListener.bindSpinner(spnA, 1.0);
+        ExpandedSpinnerListener.bindSpinner(spnB, 0.5);
+        ExpandedSpinnerListener.bindSpinner(spnA, 0.5);
 
         getContentPane().add(pnlControle, java.awt.BorderLayout.PAGE_END);
 
-        lblEquacao.setText("<html>y(x) = A * x * e<sup>-B * x</sup></html>");
+        lblEquacao.setText("<html>y(x) = A / B * x * e<sup>-(x -B) / B</sup></html>");
         pnlEquacao.add(lblEquacao);
 
         getContentPane().add(pnlEquacao, java.awt.BorderLayout.PAGE_START);
@@ -119,16 +119,21 @@ public class GraphFramePoisson extends javax.swing.JFrame {
 
         getContentPane().add(graph, java.awt.BorderLayout.CENTER);
         graph.addPlots(Color.RED, this.plot);
+        graph.addPlots(Color.GREEN, this.linePlot, this.expoentPlot);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void spnAStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnAStateChanged
         this.plot.setA((Double) this.spnA.getValue());
+        this.linePlot.setA((Double) this.spnA.getValue());
+        this.expoentPlot.setA((Double) this.spnA.getValue());
     }//GEN-LAST:event_spnAStateChanged
 
     private void spnBStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnBStateChanged
         this.plot.setB((Double) this.spnB.getValue());
+        this.linePlot.setB((Double) this.spnB.getValue());
+        this.expoentPlot.setB((Double) this.spnB.getValue());
     }//GEN-LAST:event_spnBStateChanged
 
     /**
@@ -154,6 +159,8 @@ public class GraphFramePoisson extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private PoissonPlot plot = new PoissonPlot();
+    private LinePlot linePlot = new LinePlot();
+    private ExpoentPlot expoentPlot = new ExpoentPlot();
 
     private class PoissonPlot extends JXGraph.Plot {
 
@@ -175,9 +182,62 @@ public class GraphFramePoisson extends javax.swing.JFrame {
 
         @Override
         public double compute(double x) {
-            return this.a * x * Math.exp(- this.b * x);
+            double amplitude = this.a * x / this.b;
+            double expoente = (x - this.b) / this.b;
+            return amplitude * Math.exp(- expoente);
         }
 
+    }
+
+    private class LinePlot extends JXGraph.Plot {
+
+        private double a = 1.0;
+
+        private double b = 1.0;
+
+        public void setA(double a) {
+            double oldA = this.a;
+            this.a = a;
+            super.firePropertyChange("a", oldA, this.a);
+        }
+
+        public void setB(double b) {
+            double oldB = this.b;
+            this.b = b;
+            super.firePropertyChange("b", oldB, this.b);
+        }
+
+        @Override
+        public double compute(double x) {
+            double amplitude = this.a * Math.E / this.b;
+            return amplitude * x;
+        }
+    }
+
+    private class ExpoentPlot extends JXGraph.Plot {
+
+        private double a = 1.0;
+
+        private double b = 1.0;
+
+        public void setA(double a) {
+            double oldA = this.a;
+            this.a = a;
+            super.firePropertyChange("a", oldA, this.a);
+        }
+
+        public void setB(double b) {
+            double oldB = this.b;
+            this.b = b;
+            super.firePropertyChange("b", oldB, this.b);
+        }
+
+        @Override
+        public double compute(double x) {
+            double amplitude = this.a / this.b;
+            double expoente = (x - this.b) / this.b;
+            return amplitude * Math.exp(- expoente);
+        }
     }
 
 }
