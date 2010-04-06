@@ -17,8 +17,12 @@ abstract class ExtendedStepper<N extends Number> {
     protected abstract Comparable getWithNoStep(N currentValue, int signal, N modelStep, N min, N max);
 
     Comparable getNewValue(SpinnerNumberModel model, N extendedStep, int signal) {
-        Comparable newValue = (extendedStep != null) ? getWithStep((N) model.getValue(), extendedStep, signal)
-                : getWithNoStep((N) model.getValue(), signal, (N) model.getStepSize(), (N) model.getMinimum(), (N) model.getMaximum());
+        Comparable newValue = null;
+        if(extendedStep != null) {
+            newValue = getWithStep((N) extendedStep.getClass().cast(model.getValue()), extendedStep, signal);
+        } else {
+            newValue = getWithNoStep((N) model.getValue(), signal, (N) model.getStepSize(), (N) model.getMinimum(), (N) model.getMaximum());
+        }
 
         if ((model.getMinimum() != null) && (newValue.compareTo(model.getMinimum()) < 0)) {
             return model.getMinimum();

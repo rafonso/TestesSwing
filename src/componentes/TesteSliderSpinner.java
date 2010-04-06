@@ -16,26 +16,26 @@ import javax.swing.JTextField;
  *
  * @author rafael
  */
-public class TesteXSpinner extends javax.swing.JFrame {
+public class TesteSliderSpinner extends javax.swing.JFrame {
 
     /** Creates new form TesteXSpinner */
-    public TesteXSpinner() {
+    public TesteSliderSpinner() {
         initComponents();
-        this.txfMaximo.setText(this.xSpinner.getMaximum().toString());
-        this.lblMaximoReal.setText(this.xSpinner.getMaximum().toString());
-        this.txfMinimo.setText(this.xSpinner.getMinimum().toString());
-        this.lblMinimoReal.setText(this.xSpinner.getMinimum().toString());
-        this.txfPadrao.setText(this.xSpinner.getNumberPattern());
-        this.lblPadraoReal.setText(this.xSpinner.getNumberPattern());
-        this.txfPasso.setText(this.xSpinner.getStep().toString());
-        this.lblPassoReal.setText(this.xSpinner.getStep().toString());
-        this.txfTitulo.setText(this.xSpinner.getTitle());
-        this.lblTituloReal.setText(this.xSpinner.getTitle());
-        this.txfPassoExtendido.setText(this.xSpinner.getExtendedStep().toString());
-        this.lblPassoExtREal.setText(this.xSpinner.getExtendedStep().toString());
-        this.txfValor.setText(this.xSpinner.getValue().toString());
-        this.lblValorReal.setText(this.xSpinner.getValue().toString());
-        //this.txf.setText(this.xSpinner.get().toString());
+        this.txfMaximo.setText(this.sliderSpinner.getMaximum().toString());
+        this.lblMaximoReal.setText(this.sliderSpinner.getMaximum().toString());
+        this.txfMinimo.setText(this.sliderSpinner.getMinimum().toString());
+        this.lblMinimoReal.setText(this.sliderSpinner.getMinimum().toString());
+        this.txfPadrao.setText(this.sliderSpinner.getNumberPattern());
+        this.lblPadraoReal.setText(this.sliderSpinner.getNumberPattern());
+        this.txfPasso.setText(this.sliderSpinner.getStep().toString());
+        this.lblPassoReal.setText(this.sliderSpinner.getStep().toString());
+        this.txfTitulo.setText(this.sliderSpinner.getTitle());
+        this.lblTituloReal.setText(this.sliderSpinner.getTitle());
+        this.txfPassoExtendido.setText(this.sliderSpinner.getExtendedStep().toString());
+        this.lblPassoExtREal.setText(this.sliderSpinner.getExtendedStep().toString());
+        this.txfValor.setText(this.sliderSpinner.getValue().toString());
+        this.lblValorReal.setText(this.sliderSpinner.getValue().toString());
+        //this.txf.setText(this.sliderSpinner.get().toString());
     }
 
     /** This method is called from within the constructor to
@@ -63,7 +63,6 @@ public class TesteXSpinner extends javax.swing.JFrame {
         txfPassoExtendido = new javax.swing.JTextField();
         lblPadrao = new javax.swing.JLabel();
         txfPadrao = new javax.swing.JTextField();
-        xSpinner = new componentes.XSpinner();
         pnlValores = new javax.swing.JPanel();
         lblTitulo1 = new javax.swing.JLabel();
         lblValor1 = new javax.swing.JLabel();
@@ -79,7 +78,7 @@ public class TesteXSpinner extends javax.swing.JFrame {
         lblMaximoReal = new javax.swing.JLabel();
         lblPassoExtREal = new javax.swing.JLabel();
         lblPadraoReal = new javax.swing.JLabel();
-        xSpinner1 = new componentes.XSpinner();
+        sliderSpinner = new componentes.SliderSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Teste de Configuração de XSPinner");
@@ -294,18 +293,6 @@ public class TesteXSpinner extends javax.swing.JFrame {
 
         getContentPane().add(pnlControle, java.awt.BorderLayout.NORTH);
 
-        xSpinner.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                xSpinnerPropertyChange(evt);
-            }
-        });
-        xSpinner.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                xSpinnerKeyPressed(evt);
-            }
-        });
-        getContentPane().add(xSpinner, java.awt.BorderLayout.CENTER);
-
         pnlValores.setBorder(javax.swing.BorderFactory.createTitledBorder("Controles"));
         pnlValores.setLayout(new java.awt.GridBagLayout());
 
@@ -438,13 +425,19 @@ public class TesteXSpinner extends javax.swing.JFrame {
         pnlValores.add(lblPadraoReal, gridBagConstraints);
 
         getContentPane().add(pnlValores, java.awt.BorderLayout.SOUTH);
-        getContentPane().add(xSpinner1, java.awt.BorderLayout.LINE_END);
+
+        sliderSpinner.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                sliderSpinnerPropertyChange(evt);
+            }
+        });
+        getContentPane().add(sliderSpinner, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void txfTituloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txfTituloActionPerformed
-        this.xSpinner.setTitle(this.txfTitulo.getText());
+        this.sliderSpinner.setTitle(this.txfTitulo.getText());
     }//GEN-LAST:event_txfTituloActionPerformed
 
     private void txfValorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txfValorActionPerformed
@@ -456,15 +449,15 @@ public class TesteXSpinner extends javax.swing.JFrame {
     }//GEN-LAST:event_txfPassoActionPerformed
 
     private void txfMinimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txfMinimoActionPerformed
-        this.xSpinner.setMinimum(this.numberFromField(txfMinimo));
+        this.sliderSpinner.setMinimum(this.numberFromField(txfMinimo));
     }//GEN-LAST:event_txfMinimoActionPerformed
 
     private void txfMaximoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txfMaximoActionPerformed
-        this.xSpinner.setMaximum(this.numberFromField(txfMaximo));
+        this.sliderSpinner.setMaximum(this.numberFromField(txfMaximo));
     }//GEN-LAST:event_txfMaximoActionPerformed
 
     private void txfTituloFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txfTituloFocusLost
-        this.xSpinner.setTitle(this.txfTitulo.getText());
+        this.sliderSpinner.setTitle(this.txfTitulo.getText());
     }//GEN-LAST:event_txfTituloFocusLost
 
     private void txfValorFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txfValorFocusLost
@@ -476,68 +469,66 @@ public class TesteXSpinner extends javax.swing.JFrame {
     }//GEN-LAST:event_txfPassoFocusLost
 
     private void txfMinimoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txfMinimoFocusLost
-        this.xSpinner.setMinimum(this.numberFromField(txfMinimo));
+        this.sliderSpinner.setMinimum(this.numberFromField(txfMinimo));
     }//GEN-LAST:event_txfMinimoFocusLost
 
     private void txfMaximoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txfMaximoFocusLost
-        this.xSpinner.setMaximum(this.numberFromField(txfMaximo));
+        this.sliderSpinner.setMaximum(this.numberFromField(txfMaximo));
     }//GEN-LAST:event_txfMaximoFocusLost
 
     private void txfPassoExtendidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txfPassoExtendidoActionPerformed
-        this.xSpinner.setExtendedStep(this.numberFromField(txfPassoExtendido));
+        this.sliderSpinner.setExtendedStep(this.numberFromField(txfPassoExtendido));
     }//GEN-LAST:event_txfPassoExtendidoActionPerformed
 
     private void txfPassoExtendidoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txfPassoExtendidoFocusLost
-        this.xSpinner.setExtendedStep(this.numberFromField(txfPassoExtendido));
+        this.sliderSpinner.setExtendedStep(this.numberFromField(txfPassoExtendido));
     }//GEN-LAST:event_txfPassoExtendidoFocusLost
 
     private void txfPadraoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txfPadraoActionPerformed
-        this.xSpinner.setNumberPattern(txfPadrao.getText());
+        this.sliderSpinner.setNumberPattern(txfPadrao.getText());
     }//GEN-LAST:event_txfPadraoActionPerformed
 
     private void txfPadraoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txfPadraoFocusLost
-        this.xSpinner.setNumberPattern(txfPadrao.getText());
+        this.sliderSpinner.setNumberPattern(txfPadrao.getText());
     }//GEN-LAST:event_txfPadraoFocusLost
 
-    private void xSpinnerPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_xSpinnerPropertyChange
-        if (XSpinner.PROP_EXTENDED_STEP.equals(evt.getPropertyName())) {
-            this.lblPassoExtREal.setText(evt.getNewValue().toString());
-        } else if (XSpinner.PROP_MAXIMUM.equals(evt.getPropertyName())) {
-            this.lblMaximoReal.setText(evt.getNewValue().toString());
-        } else if (XSpinner.PROP_MINIMUM.equals(evt.getPropertyName())) {
-            this.lblMinimoReal.setText(evt.getNewValue().toString());
-        } else if (XSpinner.PROP_PATTERN.equals(evt.getPropertyName())) {
-            this.lblPadraoReal.setText(evt.getNewValue().toString());
-        } else if (XSpinner.PROP_STEP.equals(evt.getPropertyName())) {
-            this.lblPassoReal.setText(evt.getNewValue().toString());
-        } else if (XSpinner.PROP_TITLE.equals(evt.getPropertyName())) {
-            this.lblTituloReal.setText(evt.getNewValue().toString());
-        } else if (XSpinner.PROP_VALUE.equals(evt.getPropertyName())) {
-            this.lblValorReal.setText(evt.getNewValue().toString());
+    private void sliderSpinnerPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_sliderSpinnerPropertyChange
+        String nextText = (evt.getNewValue() == null)? "": evt.getNewValue().toString();
+        if (SliderSpinner.PROP_EXTENDED_STEP.equals(evt.getPropertyName())) {
+            this.lblPassoExtREal.setText(nextText);
+        } else if (SliderSpinner.PROP_MAXIMUM.equals(evt.getPropertyName())) {
+            this.lblMaximoReal.setText(nextText);
+        } else if (SliderSpinner.PROP_MINIMUM.equals(evt.getPropertyName())) {
+            this.lblMinimoReal.setText(nextText);
+        } else if (SliderSpinner.PROP_PATTERN.equals(evt.getPropertyName())) {
+            this.lblPadraoReal.setText(nextText);
+        } else if (SliderSpinner.PROP_STEP.equals(evt.getPropertyName())) {
+            this.lblPassoReal.setText(nextText);
+        } else if (SliderSpinner.PROP_TITLE.equals(evt.getPropertyName())) {
+            this.lblTituloReal.setText(nextText);
+        } else if (SliderSpinner.PROP_VALUE.equals(evt.getPropertyName())) {
+            this.lblValorReal.setText(nextText);
+            this.txfValor.setText(nextText);
         } else {
             System.out.println(evt.getPropertyName() + " changed from " + evt.getOldValue() + " to " + evt.getNewValue());
         }
-    }//GEN-LAST:event_xSpinnerPropertyChange
-
-    private void xSpinnerKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_xSpinnerKeyPressed
-        System.out.println(evt);
-    }//GEN-LAST:event_xSpinnerKeyPressed
+    }//GEN-LAST:event_sliderSpinnerPropertyChange
 
     private void mudarValor() {
         Number value = this.numberFromField(txfValor);
         if (value != null) {
-            this.xSpinner.setValue(value);
-        } else if (this.xSpinner.getValue() != null) {
-            txfValor.setText(this.xSpinner.getValue().toString());
+            this.sliderSpinner.setValue(value);
+        } else if (this.sliderSpinner.getValue() != null) {
+            txfValor.setText(this.sliderSpinner.getValue().toString());
         }
     }
 
     private void mudarPasso() {
         Number value = this.numberFromField(txfPasso);
         if (value != null) {
-            this.xSpinner.setStep(value);
-        } else if (this.xSpinner.getStep() != null) {
-            txfPasso.setText(this.xSpinner.getStep().toString());
+            this.sliderSpinner.setStep(value);
+        } else if (this.sliderSpinner.getStep() != null) {
+            txfPasso.setText(this.sliderSpinner.getStep().toString());
         }
     }
 
@@ -559,11 +550,10 @@ public class TesteXSpinner extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
-                new TesteXSpinner().setVisible(true);
+                new TesteSliderSpinner().setVisible(true);
             }
         });
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel lblMaximo;
     private javax.swing.JLabel lblMaximo1;
@@ -588,6 +578,7 @@ public class TesteXSpinner extends javax.swing.JFrame {
     private javax.swing.JLabel lblValorReal;
     private javax.swing.JPanel pnlControle;
     private javax.swing.JPanel pnlValores;
+    private componentes.SliderSpinner sliderSpinner;
     private javax.swing.JTextField txfMaximo;
     private javax.swing.JTextField txfMinimo;
     private javax.swing.JTextField txfPadrao;
@@ -595,8 +586,6 @@ public class TesteXSpinner extends javax.swing.JFrame {
     private javax.swing.JTextField txfPassoExtendido;
     private javax.swing.JTextField txfTitulo;
     private javax.swing.JTextField txfValor;
-    private componentes.XSpinner xSpinner;
-    private componentes.XSpinner xSpinner1;
     // End of variables declaration//GEN-END:variables
     private String intPattern = "^[+-]?\\d+$";
     private String doublePattern = "^[+-]?\\d+(,|\\.)?\\d*$";

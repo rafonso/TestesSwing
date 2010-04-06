@@ -34,6 +34,26 @@ public class XSpinner extends JPanel {
         initComponents();
     }
 
+    private void alterarTipo(Number step) {
+        if ((step instanceof Double) && (this.getValue() instanceof Integer)) {
+            this.value = new Double(this.getValue().doubleValue());
+            this.maximum = new Double(this.getMaximum().doubleValue());
+            this.minimum = new Double(this.getMinimum().doubleValue());
+
+            this.model.setValue(this.value);
+            this.model.setMaximum((Comparable) this.maximum);
+            this.model.setMinimum((Comparable) this.minimum);
+        } else if ((step instanceof Integer) && (this.getValue() instanceof Double)) {
+            this.value = new Integer(this.getValue().intValue());
+            this.maximum = new Integer(this.getMaximum().intValue());
+            this.minimum = new Integer(this.getMinimum().intValue());
+
+            this.model.setValue(this.value);
+            this.model.setMaximum((Comparable) this.maximum);
+            this.model.setMinimum((Comparable) this.minimum);
+        }
+    }
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -92,6 +112,7 @@ public class XSpinner extends JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void spinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spinnerStateChanged
+        System.out.println(evt);
         this.setValue((Number) this.model.getValue());
     }//GEN-LAST:event_spinnerStateChanged
 
@@ -105,13 +126,13 @@ public class XSpinner extends JPanel {
     private SpinnerNumberModel model;
     private XSpinnerListener spinnerListener;
 
-    private Number value;
-    private Number step;
-    private Number extendedStep;
-    private Number minimum;
-    private Number maximum;
+    private Number value = 0;
+    private Number step = 1;
+    private Number extendedStep = 1;
+    private Number minimum = 0;
+    private Number maximum = 0;
     private String pattern;
-    private String title;
+    private String title = "Value";
 
 
     public Number getExtendedStep() {
@@ -167,6 +188,7 @@ public class XSpinner extends JPanel {
         Number oldValue = this.step;
         this.step = step;
         this.model.setStepSize(this.step);
+        alterarTipo(step);
         super.firePropertyChange( PROP_STEP, oldValue, this.step);
     }
 

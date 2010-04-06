@@ -26,21 +26,23 @@ public class XSpinnerListener implements MouseWheelListener, KeyListener {
     public static final String CTRL_UP = "CTRL_UP";
     public static final String CTRL_DOWN = "CTRL_DOWN";
     private Number extendedStep;
+    private ExtendedStepper intStepper = new IntegerStepper();
+    private ExtendedStepper doubleStepper = new DoubleStepper();
 
-    private ExtendedStepper getStepper(Object currentValue) {
-        if (currentValue instanceof Integer) {
-            return new IntegerStepper();
+    private ExtendedStepper getStepper() {
+        if (this.extendedStep instanceof Integer) {
+            return this.intStepper;
         }
-        if (currentValue instanceof Double) {
-            return new DoubleStepper();
+        if (this.extendedStep instanceof Double) {
+            return this.doubleStepper;
         }
 
-        throw new IllegalArgumentException("Classe irregular para determinar-se o valor seguinte de JSpinner: " + currentValue.getClass().getSimpleName());
+        throw new IllegalArgumentException("Classe irregular para determinar-se o valor seguinte de JSpinner: " + this.extendedStep.getClass().getSimpleName());
     }
 
     private Object getExtendedNewValue(SpinnerNumberModel model, boolean add) {
         int signal = add ? +1 : -1;
-        return this.getStepper(model.getValue()).getNewValue(model, this.extendedStep, signal);
+        return this.getStepper().getNewValue(model, this.extendedStep, signal);
     }
 
     private Object getSimpleNewValue(SpinnerNumberModel model, boolean add) {
