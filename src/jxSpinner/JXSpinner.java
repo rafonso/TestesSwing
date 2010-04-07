@@ -1,15 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * JXSpinner.java
- *
- * Created on 03/04/2010, 00:08:39
- */
 package jxSpinner;
 
+import java.awt.event.MouseWheelListener;
 import java.io.Serializable;
 import javax.swing.JComponent;
 import javax.swing.JSpinner;
@@ -27,7 +18,6 @@ public class JXSpinner extends JSpinner implements Serializable {
     public static final String PROP_PATTERN = "pattern";
     public static final String PROP_STEP = "step";
     public static final String PROP_VALUE = "value";
-
     private Number step = 1;
     private Number extendedStep = 1;
     private Number minimum = 0;
@@ -41,14 +31,11 @@ public class JXSpinner extends JSpinner implements Serializable {
         initModel();
     }
 
-    /*
     public JXSpinner(SpinnerModel model) {
         super(model);
         initComponents();
         initModel();
     }
-     * 
-     */
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -61,14 +48,27 @@ public class JXSpinner extends JSpinner implements Serializable {
 
         setModel(new XSpinnerNumberModel.IntXSpinnerNumberModel());
     }// </editor-fold>//GEN-END:initComponents
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
-
     private void initModel() {
         this.getModelAsXModel().setExtendedStep(extendedStep);
         this.getModelAsXModel().setStepSize(step);
         this.getModelAsXModel().setMaximum(maximum);
         this.getModelAsXModel().setMinimum(minimum);
+    }
+
+    private XNumberEditor createNewEditor(String pattern) {
+        for (MouseWheelListener l : super.getMouseWheelListeners()) {
+            if (l instanceof XNumberEditor) {
+                super.removeMouseWheelListener(l);
+            }
+        }
+
+        XNumberEditor editor = new XNumberEditor(this, pattern);
+        super.addMouseWheelListener(editor);
+
+        return editor;
     }
 
     private XSpinnerNumberModel getModelAsXModel() {
@@ -81,10 +81,8 @@ public class JXSpinner extends JSpinner implements Serializable {
 
     @Override
     protected JComponent createEditor(SpinnerModel model) {
-        return new XNumberEditor(this, "00");
+        return createNewEditor("00");
     }
-
-
 
     public Number getExtendedStep() {
         return extendedStep;
@@ -121,7 +119,10 @@ public class JXSpinner extends JSpinner implements Serializable {
 
     @Override
     public void setEditor(JComponent editor) {
-        super.setEditor((XNumberEditor) editor);
+        final XNumberEditor xEditor = (XNumberEditor) editor;
+        super.removeMouseWheelListener(this.getEditorAsXEditor());
+        super.addMouseWheelListener(xEditor);
+        super.setEditor(xEditor);
     }
 
     @Override
@@ -136,7 +137,7 @@ public class JXSpinner extends JSpinner implements Serializable {
     public void setPattern(String pattern) {
         String oldValue = this.pattern;
         this.pattern = pattern;
-        super.setEditor(new XNumberEditor(this, pattern));
+        super.setEditor(this.createNewEditor(pattern));
         super.firePropertyChange(PROP_PATTERN, oldValue, this.pattern);
     }
 
@@ -150,5 +151,4 @@ public class JXSpinner extends JSpinner implements Serializable {
         this.getModelAsXModel().setStepSize(step);
         super.firePropertyChange(PROP_STEP, oldValue, this.step);
     }
-
 }
