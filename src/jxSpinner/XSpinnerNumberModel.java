@@ -55,10 +55,10 @@ public abstract class XSpinnerNumberModel<N extends Number & Comparable> extends
     protected N incrValue(N step, int dir) {
         N newValue = this.getNewValue(step, dir);
 
-        if (super.getMaximum().compareTo(newValue) < 0) {
+        if ((super.getMaximum() != null) && (super.getMaximum().compareTo(newValue) < 0)) {
             return (N) super.getMaximum();
         }
-        if (super.getMinimum().compareTo(newValue) > 0) {
+        if ((super.getMinimum() != null) && (super.getMinimum().compareTo(newValue) > 0)) {
             return (N) super.getMinimum();
         }
         return newValue;

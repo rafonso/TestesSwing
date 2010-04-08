@@ -1,7 +1,10 @@
 package jxSpinner;
 
+import java.awt.event.KeyListener;
 import java.awt.event.MouseWheelListener;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import javax.swing.JComponent;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
@@ -58,16 +61,60 @@ public class JXSpinner extends JSpinner implements Serializable {
         this.getModelAsXModel().setMinimum(minimum);
     }
 
-    private XNumberEditor createNewEditor(String pattern) {
+    private XSpinnerNumberModel alterarModel(Number newStep) {
+        XSpinnerNumberModel newModel = null;
+
+        if (newStep instanceof Integer) {
+            newModel = new XSpinnerNumberModel.IntXSpinnerNumberModel();
+            newModel.setExtendedStep(this.getModelAsXModel().getExtendedStep().intValue());
+            newModel.setMaximum((Comparable) (((Number) this.getModelAsXModel().getMaximum()).intValue()));
+            newModel.setMinimum((Comparable) (((Number) this.getModelAsXModel().getMinimum()).intValue()));
+            newModel.setValue(((Number) this.getModelAsXModel().getMinimum()).intValue());
+        } else if (newStep instanceof Double) {
+            newModel = new XSpinnerNumberModel.DoubleXSpinnerNumberModel();
+            newModel.setExtendedStep(this.getModelAsXModel().getExtendedStep().doubleValue());
+            newModel.setMaximum((Comparable) (((Number) this.getModelAsXModel().getMaximum()).doubleValue()));
+            newModel.setMinimum((Comparable) (((Number) this.getModelAsXModel().getMinimum()).doubleValue()));
+            newModel.setValue(((Number) this.getModelAsXModel().getMinimum()).doubleValue());
+        } else if (newStep instanceof BigDecimal) {
+            newModel = new XSpinnerNumberModel.BigDecimalXSpinnerNumberModel();
+            newModel.setExtendedStep(new BigDecimal(this.getModelAsXModel().getExtendedStep().doubleValue()));
+            newModel.setMaximum((Comparable) (new BigDecimal(((Number) this.getModelAsXModel().getMaximum()).doubleValue())));
+            newModel.setMinimum((Comparable) (new BigDecimal(((Number) this.getModelAsXModel().getMinimum()).doubleValue())));
+            newModel.setValue(new BigDecimal(((Number) this.getModelAsXModel().getMinimum()).doubleValue()));
+        } else {
+            throw new IllegalArgumentException("Tipo sem NumberModel adequado:" + newStep.getClass().getName());
+        }
+        newModel.setStepSize(newStep);
+
+        this.extendedStep = newModel.getExtendedStep();
+        this.maximum = (Number) newModel.getMaximum();
+        this.minimum = (Number) newModel.getMinimum();
+        this.setValue(newModel.getValue());
+
+        return newModel;
+    }
+
+    private void tratarNovoXEditor(XNumberEditor editor) {
         for (MouseWheelListener l : super.getMouseWheelListeners()) {
             if (l instanceof XNumberEditor) {
                 super.removeMouseWheelListener(l);
             }
         }
-
-        XNumberEditor editor = new XNumberEditor(this, pattern);
         super.addMouseWheelListener(editor);
 
+        JComponent textField = editor.getTextField();
+        for (KeyListener l : textField.getKeyListeners()) {
+            if (l instanceof XNumberEditor) {
+                textField.removeKeyListener(l);
+            }
+        }
+        textField.addKeyListener(editor);
+    }
+
+    private XNumberEditor createNewEditor(String pattern) {
+        XNumberEditor editor = new XNumberEditor(this, (pattern != null) ? pattern : "");
+        tratarNovoXEditor(editor);
         return editor;
     }
 
@@ -81,7 +128,7 @@ public class JXSpinner extends JSpinner implements Serializable {
 
     @Override
     protected JComponent createEditor(SpinnerModel model) {
-        return createNewEditor("00");
+        return createNewEditor(this.getPattern());
     }
 
     public Number getExtendedStep() {
@@ -120,8 +167,7 @@ public class JXSpinner extends JSpinner implements Serializable {
     @Override
     public void setEditor(JComponent editor) {
         final XNumberEditor xEditor = (XNumberEditor) editor;
-        super.removeMouseWheelListener(this.getEditorAsXEditor());
-        super.addMouseWheelListener(xEditor);
+        this.tratarNovoXEditor(xEditor);
         super.setEditor(xEditor);
     }
 
@@ -148,7 +194,13 @@ public class JXSpinner extends JSpinner implements Serializable {
     public void setStep(Number step) {
         Number oldValue = this.step;
         this.step = step;
-        this.getModelAsXModel().setStepSize(step);
-        super.firePropertyChange(PROP_STEP, oldValue, this.step);
+
+        if (this.step.getClass() == oldValue.getClass()) {
+            this.getModelAsXModel().setStepSize(step);
+            super.firePropertyChange(PROP_STEP, oldValue, this.step);
+        } else {
+            super.firePropertyChange(PROP_STEP, oldValue, this.step);
+            this.setModel(this.alterarModel(step));
+        }
     }
 }
