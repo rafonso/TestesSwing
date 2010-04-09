@@ -4,7 +4,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseWheelListener;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import javax.swing.JComponent;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
