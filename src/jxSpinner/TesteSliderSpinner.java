@@ -12,7 +12,8 @@ package jxSpinner;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextField;
-import jxSpinner.SliderSpinner.PresentationOrder;
+import jxSpinner.SliderSpinner.SpinnerPosition;
+import jxSpinner.SliderSpinner.Orientation;
 
 /**
  *
@@ -23,6 +24,12 @@ public class TesteSliderSpinner extends javax.swing.JFrame {
     /** Creates new form TesteXSpinner */
     public TesteSliderSpinner() {
         initComponents();
+
+        this.cmbOrdem.setSelectedItem(this.sliderSpinner.getSliderPosition());
+        this.cmbOrientacao.setSelectedItem(this.sliderSpinner.getOrientation());
+
+        this.lblOrientacaoREal.setText(this.sliderSpinner.getOrientation().name());
+        this.lblOrdemReal.setText(this.sliderSpinner.getSliderPosition().name());
         /*
         this.txfMaximo.setText(this.spinner.getMaximum().toString());
         this.txfMinimo.setText(this.spinner.getMinimum().toString());
@@ -307,7 +314,12 @@ public class TesteSliderSpinner extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlControle.add(lblOrdem, gridBagConstraints);
 
-        cmbOrdem.setModel(new DefaultComboBoxModel(new PresentationOrder[] {PresentationOrder.SLIDER_FIRST, PresentationOrder.SPINNER_FIRST}));
+        cmbOrdem.setModel(new DefaultComboBoxModel(new SliderSpinner.SpinnerPosition[] {SliderSpinner.SpinnerPosition.BEGIN, SliderSpinner.SpinnerPosition.END}));
+        cmbOrdem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbOrdemActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 3;
@@ -325,6 +337,10 @@ public class TesteSliderSpinner extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlControle.add(lblTitulo, gridBagConstraints);
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, sliderSpinner, org.jdesktop.beansbinding.ELProperty.create("${titulo}"), txtTitulo, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -462,10 +478,6 @@ public class TesteSliderSpinner extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlValores.add(lblOrientacao1, gridBagConstraints);
-
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, sliderSpinner, org.jdesktop.beansbinding.ELProperty.create("${orientation}"), lblOrientacaoREal, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -515,6 +527,12 @@ public class TesteSliderSpinner extends javax.swing.JFrame {
         getContentPane().add(pnlValores, java.awt.BorderLayout.SOUTH);
 
         pnlSpinner.setFont(new java.awt.Font("Tahoma", 0, 18));
+
+        sliderSpinner.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                sliderSpinnerPropertyChange(evt);
+            }
+        });
         pnlSpinner.add(sliderSpinner);
 
         getContentPane().add(pnlSpinner, java.awt.BorderLayout.CENTER);
@@ -573,8 +591,20 @@ public class TesteSliderSpinner extends javax.swing.JFrame {
     }//GEN-LAST:event_txfValorFocusLost
 
     private void cmbOrientacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbOrientacaoActionPerformed
-        // TODO add your handling code here:
+        this.sliderSpinner.setOrientation((Orientation) this.cmbOrientacao.getSelectedItem());
     }//GEN-LAST:event_cmbOrientacaoActionPerformed
+
+    private void sliderSpinnerPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_sliderSpinnerPropertyChange
+        if(evt.getPropertyName().equals(SliderSpinner.PROP_SLIDER_POSITION)) {
+            this.lblOrientacaoREal.setText(this.sliderSpinner.getOrientation().name());
+        } else if(evt.getPropertyName().equals(SliderSpinner.PROP_ORDER)) {
+            this.lblOrdemReal.setText(this.sliderSpinner.getSliderPosition().name());
+        }
+    }//GEN-LAST:event_sliderSpinnerPropertyChange
+
+    private void cmbOrdemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbOrdemActionPerformed
+        this.sliderSpinner.setSliderPosition((SpinnerPosition) this.cmbOrdem.getSelectedItem());
+    }//GEN-LAST:event_cmbOrdemActionPerformed
 
     private void mudarValor() {
         Number value = this.numberFromField(txfValor);

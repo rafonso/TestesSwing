@@ -1,16 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * SliderSpinner.java
- *
- * Created on 08/04/2010, 20:53:46
- */
 package jxSpinner;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
 import javax.swing.border.TitledBorder;
 
 /**
@@ -19,24 +12,47 @@ import javax.swing.border.TitledBorder;
  */
 public class SliderSpinner extends JPanel {
 
-    public static enum PresentationOrder {
+    public static enum SpinnerPosition {
 
-        SLIDER_FIRST, SPINNER_FIRST
+        BEGIN {
+
+            @Override
+            Object getBorderPosition(Orientation orientation) {
+                return (orientation == Orientation.HORIZONTAL)? BorderLayout.WEST: BorderLayout.NORTH;
+            }
+        },
+        END {
+
+            @Override
+            Object getBorderPosition(Orientation orientation) {
+                return (orientation == Orientation.HORIZONTAL)? BorderLayout.EAST: BorderLayout.SOUTH;
+            }
+        };
+
+        abstract Object getBorderPosition(Orientation orientation);
     }
 
     public static enum Orientation {
 
-        HORIZONTAL, VERTICAL
+        HORIZONTAL(JSlider.HORIZONTAL), VERTICAL(JSlider.VERTICAL);
+        private final int sliderOrientation;
+
+        private Orientation(int sliderOrientation) {
+            this.sliderOrientation = sliderOrientation;
+        }
+
+        int getSliderOrientation() {
+            return sliderOrientation;
+        }
     }
-
-
     public static final String PROP_TITULO = "titulo";
-    public static final String PROP_PRESENTATION = "presentationOrder";
-    public static final String PROP_ORIENTATION = "orientation";
+    public static final String PROP_ORDER = "order";
+    public static final String PROP_SLIDER_POSITION = "sliderPosition";
 
     /** Creates new form BeanForm */
     public SliderSpinner() {
-        this.presentationOrder = PresentationOrder.SLIDER_FIRST;
+        this.sliderPosition = SpinnerPosition.END;
+        this.orientation = Orientation.HORIZONTAL;
         initComponents();
     }
 
@@ -44,8 +60,22 @@ public class SliderSpinner extends JPanel {
         return (TitledBorder) this.getBorder();
     }
 
-    private void changeLayout() {
+    private Dimension invertDimension(Dimension d) {
+        return new Dimension(d.height, d.width);
+    }
 
+    private void changeOrientation() {
+        this.slider.setOrientation(this.getOrientation().getSliderOrientation());
+        this.slider.setSize(this.invertDimension(this.slider.getSize()));
+        this.slider.setMaximumSize(this.invertDimension(this.slider.getMaximumSize()));
+        this.slider.setMinimumSize(this.invertDimension(this.slider.getMinimumSize()));
+
+        changeOrder();
+    }
+
+    private void changeOrder() {
+        this.remove(this.pnlSlider);
+        this.add(this.pnlSlider, this.getSliderPosition().getBorderPosition(this.getOrientation()));
     }
 
     /** This method is called from within the constructor to
@@ -56,7 +86,6 @@ public class SliderSpinner extends JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         slider = new javax.swing.JSlider();
         pnlSlider = new javax.swing.JPanel();
@@ -79,7 +108,7 @@ public class SliderSpinner extends JPanel {
     private javax.swing.JSlider slider;
     private javax.swing.JSpinner spinner;
     // End of variables declaration//GEN-END:variables
-    private PresentationOrder presentationOrder;
+    private SpinnerPosition sliderPosition;
     private Orientation orientation;
 
     public String getTitulo() {
@@ -89,18 +118,20 @@ public class SliderSpinner extends JPanel {
     public void setTitulo(String titulo) {
         String oldValue = this.getTitledBorder().getTitle();
         this.getTitledBorder().setTitle(titulo);
+        super.repaint();
         super.firePropertyChange(PROP_TITULO, oldValue, titulo);
     }
 
-    public PresentationOrder getPresentationOrder() {
-        return presentationOrder;
+    public SpinnerPosition getSliderPosition() {
+        return sliderPosition;
     }
 
-    public void setPresentationOrder(PresentationOrder presentationOrder) {
-        if (presentationOrder != this.presentationOrder) {
-            Object oldValue = this.presentationOrder;
-            this.presentationOrder = presentationOrder;
-            super.firePropertyChange(PROP_PRESENTATION, oldValue, this.presentationOrder);
+    public void setSliderPosition(SpinnerPosition order) {
+        if (order != this.sliderPosition) {
+            Object oldValue = this.sliderPosition;
+            this.sliderPosition = order;
+            super.firePropertyChange(PROP_ORDER, oldValue, this.sliderPosition);
+            this.changeOrder();
         }
     }
 
@@ -112,7 +143,8 @@ public class SliderSpinner extends JPanel {
         if (this.orientation != orientation) {
             Object oldValue = this.orientation;
             this.orientation = orientation;
-            super.firePropertyChange(PROP_ORIENTATION, oldValue, this.orientation);
+            super.firePropertyChange(PROP_SLIDER_POSITION, oldValue, this.orientation);
+            this.changeOrientation();
         }
     }
 }
