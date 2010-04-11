@@ -10,6 +10,9 @@
  */
 package jxSpinner;
 
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 /**
@@ -21,13 +24,27 @@ public class TesteJXSpinner extends javax.swing.JFrame {
     /** Creates new form TesteXSpinner */
     public TesteJXSpinner() {
         initComponents();
+
         this.txfMaximo.setText(this.spinner.getMaximum().toString());
         this.txfMinimo.setText(this.spinner.getMinimum().toString());
         this.txfPadrao.setText(this.spinner.getPattern());
         this.txfPasso.setText(this.spinner.getStep().toString());
         this.txfPassoExtendido.setText(this.spinner.getExtendedStep().toString());
         this.txfValor.setText(this.spinner.getValue().toString());
-        //this.txf.setText(this.spinner.get().toString());
+
+        this.lblMaximoReal.setText(this.spinner.getMaximum().toString());
+        this.lblMinimoReal.setText(this.spinner.getMinimum().toString());
+        this.lblPadraoReal.setText(this.spinner.getPattern());
+        this.lblPassoReal.setText(this.spinner.getStep().toString());
+        this.lblPassoExtREal.setText(this.spinner.getExtendedStep().toString());
+        this.lblValorReal.setText(this.spinner.getValue().toString());
+
+        this.map.put(JXSpinner.PROP_EXTENDED_STEP, lblPassoExtREal);
+        this.map.put(JXSpinner.PROP_MAXIMUM, lblMaximoReal);
+        this.map.put(JXSpinner.PROP_MINIMUM, lblMinimoReal);
+        this.map.put(JXSpinner.PROP_PATTERN, lblPadraoReal);
+        this.map.put(JXSpinner.PROP_STEP, lblPassoReal);
+        this.map.put(JXSpinner.PROP_VALUE, lblValorReal);
     }
 
     /** This method is called from within the constructor to
@@ -39,7 +56,6 @@ public class TesteJXSpinner extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
-        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         pnlControle = new javax.swing.JPanel();
         lblValor = new javax.swing.JLabel();
@@ -324,10 +340,6 @@ public class TesteJXSpinner extends javax.swing.JFrame {
         pnlValores.add(lblPadrao1, gridBagConstraints);
 
         lblValorReal.setPreferredSize(new java.awt.Dimension(28, 14));
-
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, spinner, org.jdesktop.beansbinding.ELProperty.create("${value}"), lblValorReal, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -336,10 +348,6 @@ public class TesteJXSpinner extends javax.swing.JFrame {
         pnlValores.add(lblValorReal, gridBagConstraints);
 
         lblPassoReal.setPreferredSize(new java.awt.Dimension(28, 14));
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, spinner, org.jdesktop.beansbinding.ELProperty.create("${step}"), lblPassoReal, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
@@ -348,10 +356,6 @@ public class TesteJXSpinner extends javax.swing.JFrame {
         pnlValores.add(lblPassoReal, gridBagConstraints);
 
         lblMinimoReal.setPreferredSize(new java.awt.Dimension(28, 14));
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, spinner, org.jdesktop.beansbinding.ELProperty.create("${minimum}"), lblMinimoReal, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -360,10 +364,6 @@ public class TesteJXSpinner extends javax.swing.JFrame {
         pnlValores.add(lblMinimoReal, gridBagConstraints);
 
         lblMaximoReal.setPreferredSize(new java.awt.Dimension(28, 14));
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, spinner, org.jdesktop.beansbinding.ELProperty.create("${maximum}"), lblMaximoReal, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 2;
@@ -372,10 +372,6 @@ public class TesteJXSpinner extends javax.swing.JFrame {
         pnlValores.add(lblMaximoReal, gridBagConstraints);
 
         lblPassoExtREal.setPreferredSize(new java.awt.Dimension(28, 14));
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, spinner, org.jdesktop.beansbinding.ELProperty.create("${extendedStep}"), lblPassoExtREal, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -384,10 +380,6 @@ public class TesteJXSpinner extends javax.swing.JFrame {
         pnlValores.add(lblPassoExtREal, gridBagConstraints);
 
         lblPadraoReal.setPreferredSize(new java.awt.Dimension(28, 14));
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, spinner, org.jdesktop.beansbinding.ELProperty.create("${pattern}"), lblPadraoReal, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 3;
@@ -399,12 +391,15 @@ public class TesteJXSpinner extends javax.swing.JFrame {
 
         pnlSpinner.setFont(new java.awt.Font("Tahoma", 0, 18));
 
-        spinner.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        spinner.setFont(new java.awt.Font("Tahoma", 0, 24));
+        spinner.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                spinnerPropertyChange(evt);
+            }
+        });
         pnlSpinner.add(spinner);
 
         getContentPane().add(pnlSpinner, java.awt.BorderLayout.CENTER);
-
-        bindingGroup.bind();
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -456,6 +451,24 @@ public class TesteJXSpinner extends javax.swing.JFrame {
     private void txfValorFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txfValorFocusLost
         mudarValor();
     }//GEN-LAST:event_txfValorFocusLost
+
+    private void spinnerPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_spinnerPropertyChange
+        JLabel labelReal = this.map.get(evt.getPropertyName());
+
+        if (labelReal != null) {
+            labelReal.setText(evt.getNewValue().toString());
+            if (labelReal == this.lblValorReal) {
+                this.txfValor.setText(evt.getNewValue().toString());
+            } else if (labelReal == this.lblPadraoReal) {
+                this.txfValor.setText(this.spinner.getValue().toString());
+                this.txfMaximo.setText(this.spinner.getMaximum().toString());
+                this.txfMinimo.setText(this.spinner.getMinimum().toString());
+                this.txfPassoExtendido.setText(this.spinner.getExtendedStep().toString());
+            }
+        } else {
+            System.out.println(evt.getPropertyName() + ": From " + evt.getOldValue() + " to " + evt.getNewValue());
+        }
+    }//GEN-LAST:event_spinnerPropertyChange
 
     private void mudarValor() {
         Number value = this.numberFromField(txfValor);
@@ -526,8 +539,8 @@ public class TesteJXSpinner extends javax.swing.JFrame {
     private javax.swing.JTextField txfPasso;
     private javax.swing.JTextField txfPassoExtendido;
     private javax.swing.JTextField txfValor;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
     private String intPattern = "^[+-]?\\d+$";
     private String doublePattern = "^[+-]?\\d+(,|\\.)?\\d*$";
+    private Map<String, JLabel> map = new HashMap<String, JLabel>();
 }

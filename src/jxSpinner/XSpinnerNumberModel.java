@@ -112,4 +112,12 @@ public abstract class XSpinnerNumberModel<N extends Number & Comparable> extends
     public N getPreviousExtendedValue() {
         return this.incrValue(this.getExtendedStep(), -1);
     }
+
+    @Override
+    public void setValue(Object value) {
+        super.setValue(value);
+//        System.out.println(value);
+    }
+
+
 }

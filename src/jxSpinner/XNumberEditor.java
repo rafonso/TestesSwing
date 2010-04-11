@@ -33,7 +33,7 @@ public class XNumberEditor extends NumberEditor implements MouseWheelListener, K
         } else {
             newValue = add ? numberModel.getNextValue() : numberModel.getPreviousValue();
         }
-        numberModel.setValue(newValue);
+        super.getSpinner().setValue(newValue);
     }
 
     public void keyTyped(KeyEvent e) {
@@ -44,25 +44,34 @@ public class XNumberEditor extends NumberEditor implements MouseWheelListener, K
         if ((e.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK)) {
             JXSpinner jXSpinner = (JXSpinner) super.getSpinner();
             XSpinnerNumberModel numberModel = (XSpinnerNumberModel) jXSpinner.getModel();
+            Object newValue = null;
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_UP:
+                    newValue = numberModel.getNextExtendedValue();
+                    break;
                 case KeyEvent.VK_PAGE_UP:
-                    numberModel.setValue(numberModel.getNextValue());
+                    newValue = numberModel.getNextValue();
                     break;
                 case KeyEvent.VK_DOWN:
+                    newValue = numberModel.getPreviousExtendedValue();
+                    break;
                 case KeyEvent.VK_PAGE_DOWN:
-                    numberModel.setValue(numberModel.getPreviousValue());
+                    newValue = numberModel.getPreviousValue();
                     break;
                 case KeyEvent.VK_HOME:
                     if (numberModel.getMaximum() != null) {
-                        numberModel.setValue(numberModel.getMaximum());
+                        newValue = numberModel.getMaximum();
                     }
                     break;
                 case KeyEvent.VK_END:
                     if (numberModel.getMinimum() != null) {
-                        numberModel.setValue(numberModel.getMinimum());
+                        newValue = numberModel.getMinimum();
                     }
                     break;
+            }
+
+            if(newValue != null) {
+                super.getSpinner().setValue(newValue);
             }
         }
     }
