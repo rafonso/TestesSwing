@@ -125,9 +125,25 @@ public class JXSpinner extends JSpinner implements Serializable {
         return (XNumberEditor) super.getEditor();
     }
 
+    private void notificarAlteracao(String propertyName, Object oldValue, Object newValue) {
+        boolean valorAlterado = ((oldValue == null) && (newValue != null))
+                || ((oldValue != null) && (newValue == null))
+                || ((oldValue != null) && (newValue != null) && !oldValue.equals(newValue));
+        if(valorAlterado) {
+            super.firePropertyChange(propertyName, oldValue, newValue);
+        }
+    }
+
     @Override
     protected JComponent createEditor(SpinnerModel model) {
         return createNewEditor(this.getPattern());
+    }
+
+    @Override
+    public void setValue(Object value) {
+        Number oldValue = (Number) super.getValue();
+        super.setValue((Number)value);
+        this.notificarAlteracao(PROP_VALUE, oldValue, value);
     }
 
     public Number getExtendedStep() {
@@ -138,7 +154,7 @@ public class JXSpinner extends JSpinner implements Serializable {
         Number oldValue = this.extendedStep;
         this.extendedStep = extendedStep;
         this.getModelAsXModel().setExtendedStep(this.extendedStep);
-        super.firePropertyChange(PROP_EXTENDED_STEP, oldValue, this.extendedStep);
+        this.notificarAlteracao(PROP_EXTENDED_STEP, oldValue, this.extendedStep);
     }
 
     public Number getMaximum() {
@@ -149,7 +165,7 @@ public class JXSpinner extends JSpinner implements Serializable {
         Number oldValue = this.maximum;
         this.maximum = maximum;
         this.getModelAsXModel().setMaximum(this.maximum);
-        super.firePropertyChange(PROP_MAXIMUM, oldValue, this.maximum);
+        this.notificarAlteracao(PROP_MAXIMUM, oldValue, this.maximum);
     }
 
     public Number getMinimum() {
@@ -160,7 +176,7 @@ public class JXSpinner extends JSpinner implements Serializable {
         Number oldValue = this.minimum;
         this.minimum = minimum;
         this.getModelAsXModel().setMinimum(this.minimum);
-        super.firePropertyChange(PROP_MINIMUM, oldValue, this.minimum);
+        this.notificarAlteracao(PROP_MINIMUM, oldValue, this.minimum);
     }
 
     @Override
@@ -183,7 +199,7 @@ public class JXSpinner extends JSpinner implements Serializable {
         String oldValue = this.pattern;
         this.pattern = pattern;
         super.setEditor(this.createNewEditor(pattern));
-        super.firePropertyChange(PROP_PATTERN, oldValue, this.pattern);
+        this.notificarAlteracao(PROP_PATTERN, oldValue, this.pattern);
     }
 
     public Number getStep() {
@@ -196,9 +212,9 @@ public class JXSpinner extends JSpinner implements Serializable {
 
         if (this.step.getClass() == oldValue.getClass()) {
             this.getModelAsXModel().setStepSize(step);
-            super.firePropertyChange(PROP_STEP, oldValue, this.step);
+            this.notificarAlteracao(PROP_STEP, oldValue, this.step);
         } else {
-            super.firePropertyChange(PROP_STEP, oldValue, this.step);
+            this.notificarAlteracao(PROP_STEP, oldValue, this.step);
             this.setModel(this.alterarModel(step));
         }
     }
