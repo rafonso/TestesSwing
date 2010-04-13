@@ -210,6 +210,9 @@
         <Component class="javax.swing.JLabel" name="lblOrientacao">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="11"/>
+            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="cmbOrientacao"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Orienta&#xe7;&#xe3;o"/>
           </Properties>
           <Constraints>
@@ -236,6 +239,9 @@
         <Component class="javax.swing.JLabel" name="lblOrdem">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="11"/>
+            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="cmbSpinnerPosition"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Ordem"/>
           </Properties>
           <Constraints>
@@ -244,14 +250,14 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="javax.swing.JComboBox" name="cmbOrdem">
+        <Component class="javax.swing.JComboBox" name="cmbSpinnerPosition">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="new DefaultComboBoxModel(new SliderSpinner.SpinnerPosition[] {SliderSpinner.SpinnerPosition.BEGIN, SliderSpinner.SpinnerPosition.END})" type="code"/>
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cmbOrdemActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cmbSpinnerPositionActionPerformed"/>
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -262,6 +268,9 @@
         <Component class="javax.swing.JLabel" name="lblTitulo">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="11"/>
+            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="txtTitulo"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="T&#xed;tulo"/>
           </Properties>
           <Constraints>
@@ -271,11 +280,9 @@
           </Constraints>
         </Component>
         <Component class="javax.swing.JTextField" name="txtTitulo">
-          <BindingProperties>
-            <BindingProperty name="text" source="sliderSpinner" sourcePath="${titulo}" target="txtTitulo" targetPath="text" updateStrategy="0" immediately="false">
-              <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-            </BindingProperty>
-          </BindingProperties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtTituloActionPerformed"/>
+          </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
               <GridBagConstraints gridX="1" gridY="4" gridWidth="0" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
@@ -459,6 +466,9 @@
         <Component class="javax.swing.JLabel" name="lblOrientacao1">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="11"/>
+            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="lblOrientacaoREal"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Orienta&#xe7;&#xe3;o"/>
           </Properties>
           <Constraints>
@@ -477,6 +487,9 @@
         <Component class="javax.swing.JLabel" name="lblOrdem1">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="11"/>
+            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="lblSpinnerOrderReal"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Ordem"/>
           </Properties>
           <Constraints>
@@ -485,7 +498,7 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="javax.swing.JLabel" name="lblOrdemReal">
+        <Component class="javax.swing.JLabel" name="lblSpinnerOrderReal">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
               <GridBagConstraints gridX="3" gridY="3" gridWidth="1" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>
@@ -495,6 +508,9 @@
         <Component class="javax.swing.JLabel" name="lblTitulo1">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="11"/>
+            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="lblTituloReal"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="T&#xed;tulo"/>
           </Properties>
           <Constraints>
@@ -504,9 +520,6 @@
           </Constraints>
         </Component>
         <Component class="javax.swing.JLabel" name="lblTituloReal">
-          <BindingProperties>
-            <BindingProperty name="text" source="sliderSpinner" sourcePath="${titulo}" target="lblTituloReal" targetPath="text" updateStrategy="0" immediately="false"/>
-          </BindingProperties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
               <GridBagConstraints gridX="1" gridY="4" gridWidth="0" gridHeight="1" fill="1" ipadX="0" ipadY="0" insetsTop="5" insetsLeft="5" insetsBottom="5" insetsRight="5" anchor="17" weightX="0.0" weightY="0.0"/>

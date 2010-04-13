@@ -2,15 +2,22 @@ package jxSpinner;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.SpinnerModel;
 import javax.swing.border.TitledBorder;
 
 /**
  *
  * @author rafael
  */
-public class SliderSpinner extends JPanel {
+public class SliderSpinner extends JPanel implements PropertyChangeListener {
 
     public static enum SpinnerPosition {
 
@@ -18,14 +25,14 @@ public class SliderSpinner extends JPanel {
 
             @Override
             Object getBorderPosition(Orientation orientation) {
-                return (orientation == Orientation.HORIZONTAL)? BorderLayout.WEST: BorderLayout.NORTH;
+                return (orientation == Orientation.HORIZONTAL) ? BorderLayout.WEST : BorderLayout.NORTH;
             }
         },
         END {
 
             @Override
             Object getBorderPosition(Orientation orientation) {
-                return (orientation == Orientation.HORIZONTAL)? BorderLayout.EAST: BorderLayout.SOUTH;
+                return (orientation == Orientation.HORIZONTAL) ? BorderLayout.EAST : BorderLayout.SOUTH;
             }
         };
 
@@ -48,6 +55,13 @@ public class SliderSpinner extends JPanel {
     public static final String PROP_TITULO = "titulo";
     public static final String PROP_ORDER = "order";
     public static final String PROP_SLIDER_POSITION = "sliderPosition";
+    public static final String PROP_EXTENDED_STEP = JXSpinner.PROP_EXTENDED_STEP;
+    public static final String PROP_MAXIMUM = JXSpinner.PROP_MAXIMUM;
+    public static final String PROP_MINIMUM = JXSpinner.PROP_MINIMUM;
+    public static final String PROP_PATTERN = JXSpinner.PROP_PATTERN;
+    public static final String PROP_STEP = JXSpinner.PROP_STEP;
+    public static final String PROP_VALUE = JXSpinner.PROP_VALUE;
+    private static final Set<String> JXSPINNER_PROPERTIES = new HashSet<String>(Arrays.asList(PROP_EXTENDED_STEP, PROP_MAXIMUM, PROP_MINIMUM, PROP_PATTERN, PROP_STEP, PROP_VALUE));
 
     /** Creates new form BeanForm */
     public SliderSpinner() {
@@ -89,7 +103,7 @@ public class SliderSpinner extends JPanel {
 
         slider = new javax.swing.JSlider();
         pnlSlider = new javax.swing.JPanel();
-        spinner = new javax.swing.JSpinner();
+        spinner = new jxSpinner.JXSpinner();
 
         setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         setLayout(new java.awt.BorderLayout(5, 5));
@@ -100,13 +114,14 @@ public class SliderSpinner extends JPanel {
         add(slider, java.awt.BorderLayout.CENTER);
 
         pnlSlider.add(spinner);
+        this.spinner.addPropertyChangeListener(this);
 
         add(pnlSlider, java.awt.BorderLayout.EAST);
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel pnlSlider;
     private javax.swing.JSlider slider;
-    private javax.swing.JSpinner spinner;
+    private jxSpinner.JXSpinner spinner;
     // End of variables declaration//GEN-END:variables
     private SpinnerPosition sliderPosition;
     private Orientation orientation;
@@ -147,4 +162,88 @@ public class SliderSpinner extends JPanel {
             this.changeOrientation();
         }
     }
+
+    public void setStep(Number step) {
+        Object oldValue = this.getStep();
+        spinner.setStep(step);
+        super.firePropertyChange(PROP_STEP, oldValue, step);
+    }
+
+    public void setPattern(String pattern) {
+        Object oldValue = this.getPattern();
+        spinner.setPattern(pattern);
+        super.firePropertyChange(PROP_PATTERN, oldValue, pattern);
+    }
+
+    public void setModel(SpinnerModel model) {
+        Object oldValue = this.spinner.getModel();
+        spinner.setModel(model);
+        //super.firePropertyChange(PROP_, oldValue, step);
+    }
+
+    public void setMinimum(Number minimum) {
+        Object oldValue = this.getMinimum();
+        spinner.setMinimum(minimum);
+        super.firePropertyChange(PROP_MINIMUM, oldValue, minimum);
+    }
+
+    public void setMaximum(Number maximum) {
+        Object oldValue = this.getMaximum();
+        spinner.setMaximum(maximum);
+        super.firePropertyChange(PROP_MAXIMUM, oldValue, maximum);
+    }
+
+    public void setExtendedStep(Number extendedStep) {
+        Object oldValue = this.getExtendedStep();
+        spinner.setExtendedStep(extendedStep);
+        super.firePropertyChange(PROP_EXTENDED_STEP, oldValue, extendedStep);
+    }
+
+    public void setEditor(JComponent editor) {
+        Object oldValue = this.spinner.getEditor();
+        spinner.setEditor(editor);
+        //super.firePropertyChange(PROP_, oldValue, editor);
+    }
+
+    public Number getStep() {
+        return spinner.getStep();
+    }
+
+    public String getPattern() {
+        return spinner.getPattern();
+    }
+
+    public Number getMinimum() {
+        return spinner.getMinimum();
+    }
+
+    public Number getMaximum() {
+        return spinner.getMaximum();
+    }
+
+    public Number getExtendedStep() {
+        return spinner.getExtendedStep();
+    }
+
+    public void setValue(Number value) {
+        spinner.setValue(value);
+    }
+
+    public Number getValue() {
+        return (Number) spinner.getValue();
+    }
+
+    public void propertyChange(PropertyChangeEvent evt) {
+        System.out.println(evt.getPropertyName() + ": From " + evt.getOldValue() + " to " + evt.getNewValue());
+        super.firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+    }
+
+    @Override
+    public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+        super.addPropertyChangeListener(propertyName, listener);
+        if(JXSPINNER_PROPERTIES.contains(propertyName)) {
+            this.spinner.addPropertyChangeListener(propertyName, listener);
+        }
+    }
+
 }
