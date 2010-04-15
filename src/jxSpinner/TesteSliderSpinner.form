@@ -543,6 +543,15 @@
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
       <SubComponents>
         <Component class="jxSpinner.SliderSpinner" name="sliderSpinner">
+          <Properties>
+            <Property name="extendedStep" type="java.lang.Number" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="50" type="code"/>
+            </Property>
+            <Property name="maximum" type="java.lang.Number" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="1000" type="code"/>
+            </Property>
+            <Property name="pattern" type="java.lang.String" value="0000"/>
+          </Properties>
           <Events>
             <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="sliderSpinnerPropertyChange"/>
           </Events>

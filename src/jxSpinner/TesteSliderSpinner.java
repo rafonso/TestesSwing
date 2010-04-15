@@ -550,6 +550,9 @@ public class TesteSliderSpinner extends javax.swing.JFrame {
 
         pnlSpinner.setFont(new java.awt.Font("Tahoma", 0, 18));
 
+        sliderSpinner.setExtendedStep(50);
+        sliderSpinner.setMaximum(1000);
+        sliderSpinner.setPattern("0000");
         sliderSpinner.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 sliderSpinnerPropertyChange(evt);

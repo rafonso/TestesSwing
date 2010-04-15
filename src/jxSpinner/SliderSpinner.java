@@ -13,6 +13,8 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.SpinnerModel;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  *
@@ -53,6 +55,22 @@ public class SliderSpinner extends JPanel implements PropertyChangeListener {
             return sliderOrientation;
         }
     }
+
+    private class SliderChangeListener implements ChangeListener {
+
+        private boolean active = true;
+
+        void activate(boolean _active) {
+            this.active = _active;
+        }
+
+        public void stateChanged(ChangeEvent e) {
+            if (this.active) {
+                spinner.setValue(sliderToValue());
+            }
+        }
+    }
+    //////////
     public static final String PROP_TITULO = "titulo";
     public static final String PROP_ORDER = "order";
     public static final String PROP_SLIDER_POSITION = "sliderPosition";
@@ -68,6 +86,7 @@ public class SliderSpinner extends JPanel implements PropertyChangeListener {
     public SliderSpinner() {
         this.sliderPosition = SpinnerPosition.END;
         this.orientation = Orientation.HORIZONTAL;
+        this.sliderChangeListener = new SliderChangeListener();
         initComponents();
         this.changeSliderPosition();
     }
@@ -102,18 +121,19 @@ public class SliderSpinner extends JPanel implements PropertyChangeListener {
         } else if (this.getValue().equals(this.getMaximum())) {
             position = this.slider.getMaximum();
         } else {
-            final int numeratorValue = (int) (this.getValue().doubleValue() - this.getMinimum().doubleValue());
-            final int numeratorPosition = this.slider.getMaximum() - this.slider.getMinimum();
-            final int denominatorValue = (int) (this.getMaximum().doubleValue() - this.getMinimum().doubleValue());
-            position = numeratorValue * numeratorPosition / denominatorValue + this.slider.getMinimum();
+            final double numeratorValue = (this.getValue().doubleValue() - this.getMinimum().doubleValue());
+            final double numeratorPosition = this.slider.getMaximum() - this.slider.getMinimum();
+            final double denominatorValue = (this.getMaximum().doubleValue() - this.getMinimum().doubleValue());
+            position = (int) (numeratorValue * numeratorPosition / denominatorValue + this.slider.getMinimum());
         }
 
         return position;
     }
-    
+
     private void changeSliderPosition() {
-        System.out.println(this.valueToSlider());
+        this.sliderChangeListener.activate(false);
         this.slider.setValue(this.valueToSlider());
+        this.sliderChangeListener.activate(true);
     }
 
     private Number sliderToValue() {
@@ -168,12 +188,13 @@ public class SliderSpinner extends JPanel implements PropertyChangeListener {
         slider.setPaintLabels(true);
         slider.setPaintTicks(true);
         slider.setMinimumSize(new java.awt.Dimension(200, 31));
-        slider.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                sliderStateChanged(evt);
+        slider.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
+            public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
+                sliderMouseWheelMoved(evt);
             }
         });
         add(slider, java.awt.BorderLayout.CENTER);
+        slider.addChangeListener(this.sliderChangeListener);
 
         pnlSlider.add(spinner);
         this.spinner.addPropertyChangeListener(this);
@@ -181,10 +202,11 @@ public class SliderSpinner extends JPanel implements PropertyChangeListener {
         add(pnlSlider, java.awt.BorderLayout.EAST);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void sliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderStateChanged
-        System.out.println(this.slider.getValue());
-        this.setValue(this.sliderToValue());
-    }//GEN-LAST:event_sliderStateChanged
+    private void sliderMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_sliderMouseWheelMoved
+        boolean add = (evt.getWheelRotation() < 0);
+        int signal = add ? +1 : -1;
+        this.slider.setValue(this.slider.getValue() + signal);
+    }//GEN-LAST:event_sliderMouseWheelMoved
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel pnlSlider;
     private javax.swing.JSlider slider;
@@ -192,6 +214,7 @@ public class SliderSpinner extends JPanel implements PropertyChangeListener {
     // End of variables declaration//GEN-END:variables
     private SpinnerPosition sliderPosition;
     private Orientation orientation;
+    private SliderChangeListener sliderChangeListener;
 
     public String getTitulo() {
         return this.getTitledBorder().getTitle();
@@ -236,7 +259,7 @@ public class SliderSpinner extends JPanel implements PropertyChangeListener {
 
     public void setStep(Number step) {
         this.validateNewValue(step, "Step");
-        
+
         Object oldValue = this.getStep();
         spinner.setStep(step);
         super.firePropertyChange(PROP_STEP, oldValue, step);
@@ -321,8 +344,7 @@ public class SliderSpinner extends JPanel implements PropertyChangeListener {
     }
 
     public void propertyChange(PropertyChangeEvent evt) {
-        System.out.println(evt.getPropertyName() + ": From " + evt.getOldValue() + " to " + evt.getNewValue());
-        if(evt.getPropertyName().equals(JXSpinner.PROP_VALUE)) {
+        if (evt.getPropertyName().equals(JXSpinner.PROP_VALUE)) {
             this.changeSliderPosition();
         }
         super.firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
