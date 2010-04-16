@@ -1,10 +1,8 @@
 package jxSpinner;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -66,7 +64,10 @@ public class SliderSpinner extends JPanel implements PropertyChangeListener {
 
         public void stateChanged(ChangeEvent e) {
             if (this.active) {
-                spinner.setValue(sliderToValue());
+                spinner.setValue(SliderSpinner.this.slider.sliderToValue(
+                        SliderSpinner.this.getStep().getClass(),
+                        SliderSpinner.this.getMinimum(),
+                        SliderSpinner.this.getMaximum()));
             }
         }
     }
@@ -95,72 +96,15 @@ public class SliderSpinner extends JPanel implements PropertyChangeListener {
         return (TitledBorder) this.getBorder();
     }
 
-    private Dimension invertDimension(Dimension d) {
-        return new Dimension(d.height, d.width);
-    }
-
-    private void changeOrientation() {
-        this.slider.setOrientation(this.getOrientation().getSliderOrientation());
-        this.slider.setSize(this.invertDimension(this.slider.getSize()));
-        this.slider.setMaximumSize(this.invertDimension(this.slider.getMaximumSize()));
-        this.slider.setMinimumSize(this.invertDimension(this.slider.getMinimumSize()));
-
-        changeOrder();
-    }
-
     private void changeOrder() {
         this.remove(this.pnlSlider);
         this.add(this.pnlSlider, this.getSliderPosition().getBorderPosition(this.getOrientation()));
     }
 
-    private int valueToSlider() {
-        int position;
-
-        if (this.getValue().equals(this.getMinimum())) {
-            position = this.slider.getMinimum();
-        } else if (this.getValue().equals(this.getMaximum())) {
-            position = this.slider.getMaximum();
-        } else {
-            final double numeratorValue = (this.getValue().doubleValue() - this.getMinimum().doubleValue());
-            final double numeratorPosition = this.slider.getMaximum() - this.slider.getMinimum();
-            final double denominatorValue = (this.getMaximum().doubleValue() - this.getMinimum().doubleValue());
-            position = (int) (numeratorValue * numeratorPosition / denominatorValue + this.slider.getMinimum());
-        }
-
-        return position;
-    }
-
     private void changeSliderPosition() {
         this.sliderChangeListener.activate(false);
-        this.slider.setValue(this.valueToSlider());
+        this.slider.setValue(this.slider.valueToSlider(this.getValue(), this.getMinimum(), this.getMaximum()));
         this.sliderChangeListener.activate(true);
-    }
-
-    private Number sliderToValue() {
-        Number value;
-
-        if (this.slider.getValue() == this.slider.getMaximum()) {
-            value = this.getMaximum();
-        } else if (this.slider.getValue() == this.slider.getMinimum()) {
-            value = this.getMinimum();
-        } else {
-            final int numeratorPosition = this.slider.getValue() - this.slider.getMinimum();
-            final int denominatorPosition = this.slider.getMaximum() - this.slider.getMinimum();
-            if (this.getStep() instanceof Integer) {
-                final int numeratorValue = this.getMaximum().intValue() - this.getMinimum().intValue();
-                value = numeratorPosition * numeratorValue / denominatorPosition + this.getMinimum().intValue();
-            } else if (this.getStep() instanceof Double) {
-                final double numeratorValue = this.getMaximum().doubleValue() - this.getMinimum().doubleValue();
-                value = numeratorPosition * numeratorValue / denominatorPosition + this.getMinimum().intValue();
-            } else if (this.getStep() instanceof BigDecimal) {
-                final BigDecimal numeratorValue = ((BigDecimal) this.getMaximum()).subtract((BigDecimal) this.getMinimum());
-                value = (new BigDecimal(numeratorPosition)).multiply(numeratorValue).divide(new BigDecimal(denominatorPosition)).add((BigDecimal) this.getMinimum());
-            } else {
-                throw new IllegalStateException("Step class unknown: " + this.getStep().getClass());
-            }
-        }
-
-        return value;
     }
 
     private void validateNewValue(Object value, String fieldName) throws IllegalArgumentException {
@@ -178,38 +122,33 @@ public class SliderSpinner extends JPanel implements PropertyChangeListener {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        slider = new javax.swing.JSlider();
         pnlSlider = new javax.swing.JPanel();
         spinner = new jxSpinner.JXSpinner();
+        slider = new jxSpinner.JXSlider();
 
         setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         setLayout(new java.awt.BorderLayout(5, 5));
-
-        slider.setPaintLabels(true);
-        slider.setPaintTicks(true);
-        slider.setMinimumSize(new java.awt.Dimension(200, 31));
-        slider.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
-            public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
-                sliderMouseWheelMoved(evt);
-            }
-        });
-        add(slider, java.awt.BorderLayout.CENTER);
-        slider.addChangeListener(this.sliderChangeListener);
 
         pnlSlider.add(spinner);
         this.spinner.addPropertyChangeListener(this);
 
         add(pnlSlider, java.awt.BorderLayout.EAST);
+
+        slider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                sliderStateChanged(evt);
+            }
+        });
+        add(slider, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void sliderMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_sliderMouseWheelMoved
-        boolean add = (evt.getWheelRotation() < 0);
-        int signal = add ? +1 : -1;
-        this.slider.setValue(this.slider.getValue() + signal);
-    }//GEN-LAST:event_sliderMouseWheelMoved
+    private void sliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderStateChanged
+        this.spinner.setValue(this.slider.sliderToValue(this.getStep().getClass(), this.getMinimum(), this.getMaximum()));
+    }//GEN-LAST:event_sliderStateChanged
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel pnlSlider;
-    private javax.swing.JSlider slider;
+    private jxSpinner.JXSlider slider;
     private jxSpinner.JXSpinner spinner;
     // End of variables declaration//GEN-END:variables
     private SpinnerPosition sliderPosition;
@@ -252,8 +191,11 @@ public class SliderSpinner extends JPanel implements PropertyChangeListener {
         if (this.orientation != orientation) {
             Object oldValue = this.orientation;
             this.orientation = orientation;
+
+            this.changeOrder();
+            this.slider.changeOrientation(orientation);
+
             super.firePropertyChange(PROP_SLIDER_POSITION, oldValue, this.orientation);
-            this.changeOrientation();
         }
     }
 
