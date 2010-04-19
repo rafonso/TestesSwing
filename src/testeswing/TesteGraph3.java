@@ -31,8 +31,6 @@ public class TesteGraph3 extends javax.swing.JFrame {
 
         graph = new org.jdesktop.swingx.JXGraph();
         pnlControle = new javax.swing.JPanel();
-        lblA = new javax.swing.JLabel();
-        spnA = new javax.swing.JSpinner();
         lblX0 = new javax.swing.JLabel();
         spnX0 = new javax.swing.JSpinner();
         lblY0 = new javax.swing.JLabel();
@@ -42,6 +40,7 @@ public class TesteGraph3 extends javax.swing.JFrame {
         lblF = new javax.swing.JLabel();
         spnF = new javax.swing.JSpinner();
         btnReset = new javax.swing.JButton();
+        slspA = new jxSpinner.SliderSpinner();
         pnlEquacao = new javax.swing.JPanel();
         lblEquacao = new javax.swing.JLabel();
 
@@ -73,29 +72,6 @@ public class TesteGraph3 extends javax.swing.JFrame {
         pnlControle.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         pnlControle.setPreferredSize(new java.awt.Dimension(400, 110));
         pnlControle.setLayout(new java.awt.GridBagLayout());
-
-        lblA.setLabelFor(spnA);
-        lblA.setText("A = ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlControle.add(lblA, gridBagConstraints);
-
-        spnA.setModel(new javax.swing.SpinnerNumberModel(1.0d, 0.0d, 2.0d, 0.01d));
-        spnA.setEditor(new javax.swing.JSpinner.NumberEditor(spnA, "0.00"));
-        spnA.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                spnAStateChanged(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
-        pnlControle.add(spnA, gridBagConstraints);
-        ExpandedSpinnerListener.bindSpinner(spnA);
 
         lblX0.setLabelFor(spnX0);
         lblX0.setText("<html>x<sub>0</sub> = </html>");
@@ -148,11 +124,7 @@ public class TesteGraph3 extends javax.swing.JFrame {
 
         lblB.setLabelFor(spnB);
         lblB.setText("B =");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 5);
-        pnlControle.add(lblB, gridBagConstraints);
+        pnlControle.add(lblB, new java.awt.GridBagConstraints());
 
         spnB.setModel(new javax.swing.SpinnerNumberModel(0.0d, -1.0d, 1.0d, 0.01d));
         spnB.setEditor(new javax.swing.JSpinner.NumberEditor(spnB, "0.00"));
@@ -199,11 +171,25 @@ public class TesteGraph3 extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlControle.add(btnReset, gridBagConstraints);
+
+        slspA.setExtendedStep(0.5);
+        slspA.setMaximum(1.0);
+        slspA.setMinimum(0.0);
+        slspA.setPattern("0.00");
+        slspA.setStep(0.01);
+        slspA.setTitulo("A");
+        slspA.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                slspAPropertyChange(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlControle.add(slspA, gridBagConstraints);
 
         getContentPane().add(pnlControle, java.awt.BorderLayout.SOUTH);
 
@@ -218,10 +204,6 @@ public class TesteGraph3 extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void spnAStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnAStateChanged
-        this.plot.setA((Double) this.spnA.getValue());
-    }//GEN-LAST:event_spnAStateChanged
 
     private void spnX0StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnX0StateChanged
         this.plot.setX0((Double) this.spnX0.getValue());
@@ -240,12 +222,16 @@ public class TesteGraph3 extends javax.swing.JFrame {
     }//GEN-LAST:event_spnFStateChanged
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
-        this.spnA.setValue(1.0);
+        this.slspA.setValue(1.0);
         this.spnB.setValue(0.0);
         this.spnF.setValue(1.0);
         this.spnX0.setValue(0.0);
         this.spnY0.setValue(0.0);
     }//GEN-LAST:event_btnResetActionPerformed
+
+    private void slspAPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_slspAPropertyChange
+        this.plot.setA((Double) this.slspA.getValue());
+    }//GEN-LAST:event_slspAPropertyChange
 
     /**
      * @param args the command line arguments
@@ -261,7 +247,6 @@ public class TesteGraph3 extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnReset;
     private org.jdesktop.swingx.JXGraph graph;
-    private javax.swing.JLabel lblA;
     private javax.swing.JLabel lblB;
     private javax.swing.JLabel lblEquacao;
     private javax.swing.JLabel lblF;
@@ -269,7 +254,7 @@ public class TesteGraph3 extends javax.swing.JFrame {
     private javax.swing.JLabel lblY0;
     private javax.swing.JPanel pnlControle;
     private javax.swing.JPanel pnlEquacao;
-    private javax.swing.JSpinner spnA;
+    private jxSpinner.SliderSpinner slspA;
     private javax.swing.JSpinner spnB;
     private javax.swing.JSpinner spnF;
     private javax.swing.JSpinner spnX0;

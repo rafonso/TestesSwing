@@ -24,7 +24,7 @@ public class TesteGraph2 extends javax.swing.JFrame {
     public TesteGraph2() {
         initComponents();
         changeK();
-        System.out.println(Arrays.toString(this.spnK.getRegisteredKeyStrokes()));
+        System.out.println(Arrays.toString(this.sliderSpinnerK.getRegisteredKeyStrokes()));
         
     }
 
@@ -39,8 +39,7 @@ public class TesteGraph2 extends javax.swing.JFrame {
 
         graph = new org.jdesktop.swingx.JXGraph();
         pnlControle = new org.jdesktop.swingx.JXPanel();
-        lblK = new org.jdesktop.swingx.JXLabel();
-        spnK = new javax.swing.JSpinner();
+        sliderSpinnerK = new jxSpinner.SliderSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.BorderLayout(5, 5));
@@ -55,63 +54,45 @@ public class TesteGraph2 extends javax.swing.JFrame {
         graph.setLayout(graphLayout);
         graphLayout.setHorizontalGroup(
             graphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGap(0, 338, Short.MAX_VALUE)
         );
         graphLayout.setVerticalGroup(
             graphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 241, Short.MAX_VALUE)
+            .addGap(0, 305, Short.MAX_VALUE)
         );
 
         getContentPane().add(graph, java.awt.BorderLayout.CENTER);
         graph.addPlots(Color.RED, this.parabolaPlot);
         graph.addPlots(Color.BLUE, new LinePlot());
 
-        lblK.setLabelFor(spnK);
-        lblK.setText("k = ");
+        pnlControle.setLayout(new java.awt.BorderLayout());
 
-        spnK.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, 4.0d, 0.01d));
-        spnK.setEditor(new javax.swing.JSpinner.NumberEditor(spnK, "0.00"));
-        spnK.setValue(1.0);
-        spnK.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                spnKStateChanged(evt);
+        sliderSpinnerK.setExtendedStep(0.5);
+        sliderSpinnerK.setMaximum(4.00);
+        sliderSpinnerK.setMinimum(0.0);
+        sliderSpinnerK.setOrientation(jxSpinner.SliderSpinner.Orientation.VERTICAL);
+        sliderSpinnerK.setPattern("0.00");
+        sliderSpinnerK.setStep(0.01);
+        sliderSpinnerK.setTitulo("K");
+        sliderSpinnerK.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                sliderSpinnerKPropertyChange(evt);
             }
         });
+        pnlControle.add(sliderSpinnerK, java.awt.BorderLayout.EAST);
 
-        javax.swing.GroupLayout pnlControleLayout = new javax.swing.GroupLayout(pnlControle);
-        pnlControle.setLayout(pnlControleLayout);
-        pnlControleLayout.setHorizontalGroup(
-            pnlControleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlControleLayout.createSequentialGroup()
-                .addGap(179, 179, 179)
-                .addComponent(lblK, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spnK, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(151, Short.MAX_VALUE))
-        );
-        pnlControleLayout.setVerticalGroup(
-            pnlControleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlControleLayout.createSequentialGroup()
-                .addContainerGap(23, Short.MAX_VALUE)
-                .addGroup(pnlControleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblK, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(spnK, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
-
-        spinnerListener.bindSpinner(spnK);
-
-        getContentPane().add(pnlControle, java.awt.BorderLayout.PAGE_END);
+        getContentPane().add(pnlControle, java.awt.BorderLayout.EAST);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void spnKStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnKStateChanged
+    private void sliderSpinnerKPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_sliderSpinnerKPropertyChange
         this.changeK();
-    }//GEN-LAST:event_spnKStateChanged
+        System.out.println(this.sliderSpinnerK.getValue());
+    }//GEN-LAST:event_sliderSpinnerKPropertyChange
 
     private void changeK() {
-        this.parabolaPlot.setK((Double) this.spnK.getValue());
+        this.parabolaPlot.setK((Double) this.sliderSpinnerK.getValue());
         this.graph.repaint();
     }
 
@@ -128,12 +109,10 @@ public class TesteGraph2 extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXGraph graph;
-    private org.jdesktop.swingx.JXLabel lblK;
     private org.jdesktop.swingx.JXPanel pnlControle;
-    private javax.swing.JSpinner spnK;
+    private jxSpinner.SliderSpinner sliderSpinnerK;
     // End of variables declaration//GEN-END:variables
     private ParabolaPlot parabolaPlot = new ParabolaPlot();
-    private ExpandedSpinnerListener spinnerListener = new ExpandedSpinnerListener();
 }
 
 class ParabolaPlot extends JXGraph.Plot {
