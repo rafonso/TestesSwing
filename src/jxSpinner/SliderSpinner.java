@@ -3,6 +3,7 @@ package jxSpinner;
 import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -64,7 +65,7 @@ public class SliderSpinner extends JPanel implements PropertyChangeListener {
 
         public void stateChanged(ChangeEvent e) {
             if (this.active) {
-                spinner.setValue(SliderSpinner.this.slider.sliderToValue(
+                spinner.setValue(SliderSpinner.this.sliderToValue(
                         SliderSpinner.this.getStep().getClass(),
                         SliderSpinner.this.getMinimum(),
                         SliderSpinner.this.getMaximum()));
@@ -103,8 +104,52 @@ public class SliderSpinner extends JPanel implements PropertyChangeListener {
 
     private void changeSliderPosition() {
         this.sliderChangeListener.activate(false);
-        this.slider.setValue(this.slider.valueToSlider(this.getValue(), this.getMinimum(), this.getMaximum()));
+        this.slider.setValue(this.valueToSlider(this.getValue(), this.getMinimum(), this.getMaximum()));
         this.sliderChangeListener.activate(true);
+    }
+
+   private int valueToSlider(Number value, Number minimum, Number maximum) {
+        int position;
+
+        if (value.equals(minimum)) {
+            position = this.slider.getMinimum();
+        } else if (value.equals(maximum)) {
+            position = this.slider.getMaximum();
+        } else {
+            final double numeratorValue = (value.doubleValue() - minimum.doubleValue());
+            final double numeratorPosition = this.slider.getMaximum() - this.slider.getMinimum();
+            final double denominatorValue = (maximum.doubleValue() - minimum.doubleValue());
+            position = (int) (numeratorValue * numeratorPosition / denominatorValue) + this.slider.getMinimum();
+        }
+
+        return position;
+    }
+
+    private Number sliderToValue(Class stepClass, Number minimum, Number maximum) {
+        Number value;
+
+        if (this.slider.getValue() == this.slider.getMaximum()) {
+            value = maximum;
+        } else if (this.slider.getValue() == this.slider.getMinimum()) {
+            value = minimum;
+        } else {
+            final int numeratorPosition = this.slider.getValue() - this.slider.getMinimum();
+            final int denominatorPosition = this.slider.getMaximum() - this.slider.getMinimum();
+            if (stepClass == Integer.class) {
+                final int numeratorValue = maximum.intValue() - minimum.intValue();
+                value = numeratorPosition * numeratorValue / denominatorPosition + minimum.intValue();
+            } else if (stepClass == Double.class) {
+                final double numeratorValue = maximum.doubleValue() - minimum.doubleValue();
+                value = numeratorPosition * numeratorValue / denominatorPosition + minimum.intValue();
+            } else if (stepClass == BigDecimal.class) {
+                final BigDecimal numeratorValue = ((BigDecimal) maximum).subtract((BigDecimal) minimum);
+                value = (new BigDecimal(numeratorPosition)).multiply(numeratorValue).divide(new BigDecimal(denominatorPosition)).add((BigDecimal) minimum);
+            } else {
+                throw new IllegalStateException("Step class unknown: " + stepClass);
+            }
+        }
+
+        return value;
     }
 
     private void validateNewValue(Object value, String fieldName) throws IllegalArgumentException {
@@ -143,9 +188,8 @@ public class SliderSpinner extends JPanel implements PropertyChangeListener {
     }// </editor-fold>//GEN-END:initComponents
 
     private void sliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderStateChanged
-        this.spinner.setValue(this.slider.sliderToValue(this.getStep().getClass(), this.getMinimum(), this.getMaximum()));
+        this.spinner.setValue(this.sliderToValue(this.getStep().getClass(), this.getMinimum(), this.getMaximum()));
     }//GEN-LAST:event_sliderStateChanged
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel pnlSlider;
     private jxSpinner.JXSlider slider;

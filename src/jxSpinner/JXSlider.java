@@ -36,50 +36,6 @@ public class JXSlider extends JSlider {
         this.setMinimumSize(this.invertDimension(this.getMinimumSize()));
     }
 
-    int valueToSlider(Number value, Number minimum, Number maximum) {
-        int position;
-
-        if (value.equals(minimum)) {
-            position = super.getMinimum();
-        } else if (value.equals(maximum)) {
-            position = super.getMaximum();
-        } else {
-            final double numeratorValue = (value.doubleValue() - minimum.doubleValue());
-            final double numeratorPosition = super.getMaximum() - super.getMinimum();
-            final double denominatorValue = (maximum.doubleValue() - minimum.doubleValue());
-            position = (int) (numeratorValue * numeratorPosition / denominatorValue) + super.getMinimum();
-        }
-
-        return position;
-    }
-
-    Number sliderToValue(Class stepClass, Number minimum, Number maximum) {
-        Number value;
-
-        if (super.getValue() == super.getMaximum()) {
-            value = super.getMaximum();
-        } else if (super.getValue() == super.getMinimum()) {
-            value = super.getMinimum();
-        } else {
-            final int numeratorPosition = super.getValue() - super.getMinimum();
-            final int denominatorPosition = super.getMaximum() - super.getMinimum();
-            if (stepClass == Integer.class) {
-                final int numeratorValue = maximum.intValue() - minimum.intValue();
-                value = numeratorPosition * numeratorValue / denominatorPosition + minimum.intValue();
-            } else if (stepClass == Double.class) {
-                final double numeratorValue = maximum.doubleValue() - minimum.doubleValue();
-                value = numeratorPosition * numeratorValue / denominatorPosition + minimum.intValue();
-            } else if (stepClass == BigDecimal.class) {
-                final BigDecimal numeratorValue = ((BigDecimal) maximum).subtract((BigDecimal) minimum);
-                value = (new BigDecimal(numeratorPosition)).multiply(numeratorValue).divide(new BigDecimal(denominatorPosition)).add((BigDecimal) minimum);
-            } else {
-                throw new IllegalStateException("Step class unknown: " + stepClass);
-            }
-        }
-
-        return value;
-    }
-
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
