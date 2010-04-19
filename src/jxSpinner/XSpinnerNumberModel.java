@@ -79,7 +79,7 @@ public abstract class XSpinnerNumberModel<N extends Number & Comparable> extends
 
     public void setMaximum(N maximum) {
         // Validação
-        if ((maximum != null) && (super.getMinimum() != null) && (super.getMinimum().compareTo(maximum) > 0)) {
+        if ((maximum != null) && (super.getMinimum() != null) && (((Number)super.getMinimum()).doubleValue() > maximum.doubleValue())) {
             throw new IllegalArgumentException("New Maximum (" + maximum + ") lesser than Minimum (" + super.getMinimum() + ")");
         }
 
@@ -88,7 +88,7 @@ public abstract class XSpinnerNumberModel<N extends Number & Comparable> extends
 
     public void setMinimum(N minimum) {
         // Validação
-        if ((minimum != null) && (super.getMaximum() != null) && (super.getMaximum().compareTo(minimum) < 0)) {
+        if ((minimum != null) && (super.getMaximum() != null) && (((Number)super.getMaximum()).doubleValue() < minimum.doubleValue())) {
             throw new IllegalArgumentException("New Maximum (" + minimum + ") lesser than Minimum (" + super.getMaximum() + ")");
         }
 
